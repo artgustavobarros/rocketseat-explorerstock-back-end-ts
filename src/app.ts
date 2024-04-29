@@ -5,8 +5,8 @@ import { usersRoutes } from './http/routes/users-routes'
 import { productsRoutes } from './http/routes/products-routes'
 import fastifyJwt from '@fastify/jwt'
 import fastifyCookie from '@fastify/cookie'
-import { verifyJWT } from './http/middlewares/verify-jwt'
 import cors from '@fastify/cors'
+import { salesRoutes } from './http/routes/sales-routes'
 
 export const app = fastify()
 
@@ -22,6 +22,7 @@ app.register(fastifyCookie)
 
 app.register(usersRoutes)
 app.register(productsRoutes)
+app.register(salesRoutes)
 
 app.setErrorHandler((error, request, reply) => {
   if (error instanceof ZodError) {
@@ -39,9 +40,4 @@ app.setErrorHandler((error, request, reply) => {
 
 app.get('/ping', async (request, reply) => {
   reply.send({ message: 'pong' })
-})
-
-app.get('/sales', { preHandler: verifyJWT }, async (request, reply) => {
-  const sales = ['Venda 1', 'Venda 2', 'Venda 3']
-  reply.send({ sales })
 })
